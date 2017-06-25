@@ -16,22 +16,33 @@ namespace CityInfo.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // UK - ConfigureServices is used to add services to the container, and to configure those services
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // UK - Configure is used to specify how an ASP.NET application will respond to individual HTTP requests
             loggerFactory.AddConsole();
-
+            // UK - Enviroment can be specifed
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            } else
+            {
+                app.UseExceptionHandler();
             }
 
-            app.Run(async (context) =>
+            // UK - Example of middleware
+            app.Run((context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                throw new Exception("Example exception");
             });
+
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World!");
+            //});
         }
     }
 }
