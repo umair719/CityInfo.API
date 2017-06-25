@@ -17,6 +17,9 @@ namespace CityInfo.API
         public void ConfigureServices(IServiceCollection services)
         {
             // UK - ConfigureServices is used to add services to the container, and to configure those services
+            // UK - Adding MCV framework services (does not show up by default)
+            services.AddMvc();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,11 +36,14 @@ namespace CityInfo.API
                 app.UseExceptionHandler();
             }
 
+            // UK - reference of MVC service
+            app.UseMvc();
+
             // UK - Example of middleware
-            app.Run((context) =>
-            {
-                throw new Exception("Example exception");
-            });
+            //app.Run((context) =>
+            //{
+            //    throw new Exception("Example exception");
+            //});
 
             //app.Run(async (context) =>
             //{
