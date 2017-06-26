@@ -14,13 +14,26 @@ namespace CityInfo.API.Controllers
         // UK - We want this method to be invoked when calling /api/cities
         // UK - this is redundant when Route attribute is defined at the Controller level
         // [HttpGet("api/cities")]
-        public JsonResult GetCities()
+        public IActionResult GetCities()
         {
-            return new JsonResult(new List<object>()
+            return Ok(CitiesDataStore.Current.Cities);
+            // UK - Removed the JSON hard text and updated to utilize an static property in the Cities object
+            // var temp = new JsonResult(CitiesDataStore.Current.Cities);
+            // temp.StatusCode = 200;
+            // return temp;
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCity(int id)
+        {
+            // find city
+            var cityToReturn = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
+
+            if (cityToReturn == null)
             {
-                new {id = 1, Name="New York City"},
-                new {id = 2, Name="Antwerp"}
-            });
+                return NotFound();
+            }
+            return Ok(cityToReturn);
         }
     }
 }
