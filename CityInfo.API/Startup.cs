@@ -37,6 +37,9 @@ namespace CityInfo.API
                 app.UseExceptionHandler();
             }
 
+            // UK - use built in status code page. This is going to return text based string.
+            app.UseStatusCodePages();
+
             // UK - reference of MVC service
             app.UseMvc();
 

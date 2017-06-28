@@ -23,6 +23,7 @@ namespace CityInfo.API.Controllers
             // return temp;
         }
 
+        // UK - the method is called when id is present
         [HttpGet("{id}")]
         public IActionResult GetCity(int id)
         {
