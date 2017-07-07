@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace CityInfo.API.Models
 {
-    // UK - date object for point of intrests
+
+    // UK - date ojvect for point of interests
     public class PointOfInterestDto
     {
         public int Id { get; set; }
