@@ -19,7 +19,7 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
 
-            return Ok(city.PointsOfIntrest);
+            return Ok(city.PointsOfInterest);
         }
 
         [HttpGet("{cityId}/pointsofinterest/{id}")]
@@ -32,7 +32,7 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
 
-            var pointOfIntreset = city.PointsOfIntrest.FirstOrDefault(p => p.Id == id);
+            var pointOfIntreset = city.PointsOfInterest.FirstOrDefault(p => p.Id == id);
 
             if (pointOfIntreset == null)
             {
@@ -40,6 +40,33 @@ namespace CityInfo.API.Controllers
             }
 
             return Ok(pointOfIntreset);
+        }
+
+        [HttpPost("{cityId}/pointsofinterest")]
+        public IActionResult CreatePointOfInterest(int cityId, [FromBody] PointofInterestForCreationDto pointOfInterest)
+        {
+            if (pointOfInterest == null)
+            {
+                return BadRequest();
+            }
+
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            var maxPointOfIntrestId = CitiesDataStore.Current.Cities.SelectMany(c => c.PointsOfInterest).Max(p => p.Id);
+
+            var finalPointOfInterest = new PointOfInterestDto()
+            {
+                Id = ++maxPointOfIntrestId,
+                Name = pointOfInterest.Name,
+                Description = pointOfInterest.Description
+            };
+
+            city.PointsOfInterest
         }
     }
 
