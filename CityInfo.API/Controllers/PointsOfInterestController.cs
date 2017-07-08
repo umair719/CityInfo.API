@@ -114,38 +114,54 @@ namespace CityInfo.API.Controllers
             return NoContent();
         }
 
+        // UK - Partial Update of the point of interest
         [HttpPatch("{cityId}/pointsofinterest/{id}")]
-        public IActionResult PartialUpdatePointOfInterest(int cityId, int id, [FromBody] JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc)
+        public IActionResult PartialUpdatePointOfInterest(
+            int cityId, int id, [FromBody] JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc)
         {
+            
+            // if patch json is empty, then return bad request
             if (patchDoc == null)
             {
-                return BadRequest();
+                // return BadRequest();
             }
 
+            // find the city reference in the URI
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
             if (city == null)
             {
                 return NotFound();
             }
 
+            // find the point of interest refereced in the URI
             var pointOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(c => c.Id == id);
-
             if (pointOfInterestFromStore == null)
             {
                 return NotFound();
             }
 
+            // create new object with pointofinterestforupdatedto type and 
+            // and use the currently saved values as defaults.
             var pointOfInterestToPatch = new PointOfInterestForUpdateDto()
             {
                 Name = pointOfInterestFromStore.Name,
                 Description = pointOfInterestFromStore.Description
-            }
+            };
+
+
+            // merge with pointOfInterestToPatch from incoming model state
             patchDoc.ApplyTo(pointOfInterestToPatch, ModelState);
 
             if (ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+
+            pointOfInterestFromStore.Name = pointOfInterestToPatch.Name;
+            pointOfInterestFromStore.Description = pointOfInterestToPatch.Name;
+
+            return NoContent();
         }
     }
 
