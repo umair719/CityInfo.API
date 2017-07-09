@@ -1,4 +1,4 @@
-﻿﻿using CityInfo.API.Models;
+﻿﻿﻿using CityInfo.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -119,7 +119,7 @@ namespace CityInfo.API.Controllers
         public IActionResult PartialUpdatePointOfInterest(
             int cityId, int id, [FromBody] JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc)
         {
-            
+
             // if patch json is empty, then return bad request
             if (patchDoc == null)
             {
@@ -166,14 +166,38 @@ namespace CityInfo.API.Controllers
             // Runs validation for the PointofInterestForUpdateDto object
             TryValidateModel(pointOfInterestToPatch);
 
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             pointOfInterestFromStore.Name = pointOfInterestToPatch.Name;
             pointOfInterestFromStore.Description = pointOfInterestToPatch.Description;
 
+            return NoContent();
+        }
+
+        // Delete action
+        [HttpDelete("{cityId}/pointsofinterest/{id}")]
+        public IActionResult DeletePointOfInterest(int cityId, int id)
+        {
+            // validate city exists
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+            if (city == null){
+                return NotFound();
+            }
+
+            // validate point of interest exists
+            var pointOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(c => c.Id == id);
+            if (pointOfInterestFromStore == null){
+                return NotFound();            
+            }
+
+            // perform remove aciton 
+            city.PointsOfInterest.Remove(pointOfInterestFromStore);
+
+
+            // return no content
             return NoContent();
         }
     }
