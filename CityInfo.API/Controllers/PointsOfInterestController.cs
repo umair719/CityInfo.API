@@ -1,4 +1,4 @@
-﻿using CityInfo.API.Models;
+﻿﻿using CityInfo.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -123,7 +123,7 @@ namespace CityInfo.API.Controllers
             // if patch json is empty, then return bad request
             if (patchDoc == null)
             {
-                // return BadRequest();
+                return BadRequest();
             }
 
             // find the city reference in the URI
@@ -152,14 +152,27 @@ namespace CityInfo.API.Controllers
             // merge with pointOfInterestToPatch from incoming model state
             patchDoc.ApplyTo(pointOfInterestToPatch, ModelState);
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            // Make sure name and description is not the same.
+            if (pointOfInterestToPatch.Description == pointOfInterestToPatch.Name)
+            {
+                ModelState.AddModelError("Description", "the provided description should be defferent from the name");
+            }
+
+            // Runs validation for the PointofInterestForUpdateDto object
+            TryValidateModel(pointOfInterestToPatch);
+
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 
             pointOfInterestFromStore.Name = pointOfInterestToPatch.Name;
-            pointOfInterestFromStore.Description = pointOfInterestToPatch.Name;
+            pointOfInterestFromStore.Description = pointOfInterestToPatch.Description;
 
             return NoContent();
         }
