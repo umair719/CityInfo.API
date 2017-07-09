@@ -44,6 +44,9 @@ namespace CityInfo.API
         {
             // UK - Configure is used to specify how an ASP.NET application will respond to individual HTTP requests
             loggerFactory.AddConsole();
+
+            loggerFactory.AddDebug();
+
             // UK - Enviroment can be specifed
             if (env.IsDevelopment())
             {

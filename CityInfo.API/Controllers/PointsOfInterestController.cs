@@ -1,27 +1,45 @@
-﻿﻿﻿using CityInfo.API.Models;
+﻿using CityInfo.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace CityInfo.API.Controllers
 {
     [Route("api/cities")]
     public class PointsOfInterestController : Controller
     {
+        private ILogger<PointsOfInterestController> _logger;
+
+        public PointsOfInterestController(ILogger<PointsOfInterestController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet("{cityId}/pointsofinterest")]
         public IActionResult GetPointsOfInterest(int cityId)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city == null)
+            try
             {
-                return NotFound();
-            }
+                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
-            return Ok(city.PointsOfInterest);
+                if (city == null)
+                {
+                    _logger.LogInformation($"City with id {cityId} wasn't found when accessing poins of interest.");
+                    return NotFound();
+                }
+
+                return Ok(city.PointsOfInterest);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting points of interest for city with id {cityId}.", ex);
+                return StatusCode(500, "A problem happened while handing your request.");
+            }
         }
 
         [HttpGet("{cityId}/pointsofinterest/{id}", Name = "GetPointOfInterest")]
@@ -183,14 +201,16 @@ namespace CityInfo.API.Controllers
         {
             // validate city exists
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-            if (city == null){
+            if (city == null)
+            {
                 return NotFound();
             }
 
             // validate point of interest exists
             var pointOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(c => c.Id == id);
-            if (pointOfInterestFromStore == null){
-                return NotFound();            
+            if (pointOfInterestFromStore == null)
+            {
+                return NotFound();
             }
 
             // perform remove aciton 
