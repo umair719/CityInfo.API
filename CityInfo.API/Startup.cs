@@ -44,7 +44,11 @@ namespace CityInfo.API
 
             //UK - Transient life time services are created each time they are requested
             // We are using Transient since the the service is light weight
-            services.AddTransient<LocalMailService>();
+#if DEBUG
+            services.AddTransient<IMailService, LocalMailService>();
+#else
+            services.AddTransient<IMailService, CloudMailService>();
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
