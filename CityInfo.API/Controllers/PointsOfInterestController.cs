@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using CityInfo.API.Services;
 
 namespace CityInfo.API.Controllers
 {
@@ -13,10 +14,12 @@ namespace CityInfo.API.Controllers
     public class PointsOfInterestController : Controller
     {
         private ILogger<PointsOfInterestController> _logger;
+        private LocalMailService _mailService;
 
-        public PointsOfInterestController(ILogger<PointsOfInterestController> logger)
+        public PointsOfInterestController(ILogger<PointsOfInterestController> logger, LocalMailService mailService)
         {
             _logger = logger;
+            _mailService = mailService;
         }
 
         [HttpGet("{cityId}/pointsofinterest")]
@@ -29,7 +32,6 @@ namespace CityInfo.API.Controllers
                 if (city == null)
                 {
                     _logger.LogInformation($"City with id {cityId} wasn't found when accessing poins of interest.");
-                    return NotFound();
                 }
 
                 return Ok(city.PointsOfInterest);
@@ -216,6 +218,10 @@ namespace CityInfo.API.Controllers
             // perform remove aciton 
             city.PointsOfInterest.Remove(pointOfInterestFromStore);
 
+
+            // Send email when the point of interest is deleted. If we need to send email
+            _mailService.Send("Point of interest deleted.", 
+                              $"Point of interest {pointOfInterestFromStore.Name} with id {pointOfInterestFromStore.Id} was deleted.");
 
             // return no content
             return NoContent();

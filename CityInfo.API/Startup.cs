@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using NLog.Extensions.Logging;
 
 namespace CityInfo.API
 {
@@ -37,6 +39,12 @@ namespace CityInfo.API
             //    }
             //})
 
+            // Scoped lifetime services are created once per request
+            // Singleton lifetime servers are created the first time they are requested.
+
+            //UK - Transient life time services are created each time they are requested
+            // We are using Transient since the the service is light weight
+            services.AddTransient<LocalMailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +54,9 @@ namespace CityInfo.API
             loggerFactory.AddConsole();
 
             loggerFactory.AddDebug();
+
+            loggerFactory.AddNLog();
+
 
             // UK - Enviroment can be specifed
             if (env.IsDevelopment())
