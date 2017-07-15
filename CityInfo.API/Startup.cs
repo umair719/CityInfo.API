@@ -72,7 +72,7 @@ namespace CityInfo.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, CityInfoContext cityInfoContext)
         {
             // UK - Configure is used to specify how an ASP.NET application will respond to individual HTTP requests
             loggerFactory.AddConsole();
@@ -91,6 +91,8 @@ namespace CityInfo.API
             {
                 app.UseExceptionHandler();
             }
+
+            cityInfoContext.EnsureSeedDataForContext();
 
             // UK - use built in status code page. This is going to return text based string.
             app.UseStatusCodePages();
