@@ -9,7 +9,7 @@ namespace CityInfo.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Descriptoin",
+                name: "Description",
                 table: "PointOfInterest",
                 maxLength: 200,
                 nullable: true);
@@ -18,7 +18,7 @@ namespace CityInfo.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Descriptoin",
+                name: "Description",
                 table: "PointOfInterest");
         }
     }

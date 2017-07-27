@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using CityInfo.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
+/// <summary>
+///  Used to provide presistance logic
+///  The consumer is ignorant of how its count
+/// </summary>
 namespace CityInfo.API.Services
 {
     public class CityInfoRepository : ICityInfoRepository
@@ -14,6 +18,11 @@ namespace CityInfo.API.Services
         public CityInfoRepository(CityInfoContext context)
         {
             _context = context;
+        }
+
+        public bool CityExists(int cityId)
+        {
+            return _context.Cities.Any(c => c.Id == cityId);
         }
 
         public IEnumerable<City> GetCities()

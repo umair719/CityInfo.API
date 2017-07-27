@@ -27,12 +27,12 @@ namespace CityInfo.API
                         new PointOfInterest()
                         {
                             Name = "Central Park",
-                            Descriptoin = "The most vistied urban park in the United States."
+                            Description = "The most vistied urban park in the United States."
                         },
                         new PointOfInterest()
                         {
                             Name = "Empire State Building",
-                            Descriptoin = "A 102-story skyscrapter located in Midtown Manhattan."
+                            Description = "A 102-story skyscrapter located in Midtown Manhattan."
                         }
                     }
                 },
@@ -46,13 +46,13 @@ namespace CityInfo.API
                         {
 
                             Name = "Cathedral of Our Lady",
-                            Descriptoin = "A Gothic sytle catherdral, concived by archtitects Jan and Pieter Appelmans"
+                            Description = "A Gothic sytle catherdral, concived by archtitects Jan and Pieter Appelmans"
                         },
                         new PointOfInterest()
                         {
 
                             Name = "Antwerp Central Station",
-                            Descriptoin = "The finest example fo railway architecture in Belgium"
+                            Description = "The finest example fo railway architecture in Belgium"
                         }
                     }
                 },
@@ -65,12 +65,12 @@ namespace CityInfo.API
                         new PointOfInterest()
                         {
                             Name = "Eiffel Tower",
-                            Descriptoin = "A wrought iron lattice tower on the Champ de Mars, named after engineer Gustave Ei"
+                            Description = "A wrought iron lattice tower on the Champ de Mars, named after engineer Gustave Ei"
                         },
                         new PointOfInterest()
                         {
                             Name = "The Louvre",
-                            Descriptoin = "the world's largest museam."
+                            Description = "the world's largest museam."
                         }
                     }
                 }
