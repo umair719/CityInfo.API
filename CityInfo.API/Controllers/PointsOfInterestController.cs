@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using CityInfo.API.Services;
+using AutoMapper;
 
 namespace CityInfo.API.Controllers
 {
@@ -41,16 +42,17 @@ namespace CityInfo.API.Controllers
 
                 var pointsOfInterestForCity = _cityInfoRepository.GetPointsOfInterestForCity(cityId);
 
-                var pointsOfInterestForCityResults = new List<PointOfInterestDto>();
-                foreach (var poi in pointsOfInterestForCity)
-                {
-                    pointsOfInterestForCityResults.Add(new PointOfInterestDto()
-                    {
-                        Id = poi.Id,
-                        Name = poi.Name,
-                        Description = poi.Description
-                    });
-                }
+                var pointsOfInterestForCityResults = Mapper.Map<IEnumerable<PointOfInterestDto>>(pointsOfInterestForCity);
+                //var pointsOfInterestForCityResults = new List<PointOfInterestDto>();
+                //foreach (var poi in pointsOfInterestForCity)
+                //{
+                //    pointsOfInterestForCityResults.Add(new PointOfInterestDto()
+                //    {
+                //        Id = poi.Id,
+                //        Name = poi.Name,
+                //        Description = poi.Description
+                //    });
+                //}
 
                 return Ok(pointsOfInterestForCityResults);
                 //if (city == null)
@@ -84,12 +86,13 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
 
-            var pointOfInterestResult = new PointOfInterestDto()
-            {
-                Id = pointOfInterest.Id,
-                Name = pointOfInterest.Name,
-                Description = pointOfInterest.Description
-            };
+            var pointOfInterestResult = Mapper.Map<PointOfInterestDto>(pointOfInterest);
+            //var pointOfInterestResult = new PointOfInterestDto()
+            //{
+            //    Id = pointOfInterest.Id,
+            //    Name = pointOfInterest.Name,
+            //    Description = pointOfInterest.Description
+            //};
 
             return Ok(pointOfInterestResult);
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CityInfo.API.Services;
 using CityInfo.API.Models;
+using AutoMapper;
 
 namespace CityInfo.API.Controllers
 {
@@ -28,17 +29,8 @@ namespace CityInfo.API.Controllers
             //return Ok(CitiesDataStore.Current.Cities);
             var cityEntities = _cityInfoRepository.GetCities();
 
-            var results = new List<CityWithoutPointsOfInterestDto>();
+            var results = Mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities);
 
-            foreach (var cityEntity in cityEntities)
-            {
-                results.Add(new CityWithoutPointsOfInterestDto
-                {
-                    Id = cityEntity.Id,
-                    Description = cityEntity.Description,
-                    Name = cityEntity.Name
-                });
-            }
             return Ok(results);
             // UK - Removed the JSON hard text and updated to utilize an static property in the Cities object
             // var temp = new JsonResult(CitiesDataStore.Current.Cities);
@@ -59,34 +51,35 @@ namespace CityInfo.API.Controllers
 
             if (includePointsOfInterest)
             {
-                var cityResult = new CityDto()
-                {
-                    Id = city.Id,
-                    Name = city.Name,
-                    Description = city.Description
-                };
+                var cityResult = Mapper.Map<CityDto>(city);
+                //var cityResult = new CityDto()
+                //{
+                //    Id = city.Id,
+                //    Name = city.Name,
+                //    Description = city.Description
+                //};
 
-                foreach (var poi in city.PointsOfInterest)
-                {
-                    cityResult.PointsOfInterest.Add(
-                        new PointOfInterestDto()
-                        {
-                            Id = poi.Id,
-                            Name = poi.Name,
-                            Description = poi.Description
-                        });
-                }
+                //foreach (var poi in city.PointsOfInterest)
+                //{
+                //    cityResult.PointsOfInterest.Add(
+                //        new PointOfInterestDto()
+                //        {
+                //            Id = poi.Id,
+                //            Name = poi.Name,
+                //            Description = poi.Description
+                //        });
+                //}
 
                 return Ok(cityResult);
             }
 
-
-            var cityWithoutPointsOfInterestResult = new CityWithoutPointsOfInterestDto()
-            {
-                Id = city.Id,
-                Description = city.Description,
-                Name = city.Name
-            };
+            var cityWithoutPointsOfInterestResult = Mapper.Map<CityWithoutPointsOfInterestDto>(city);
+            //var cityWithoutPointsOfInterestResult = new CityWithoutPointsOfInterestDto()
+            //{
+            //    Id = city.Id,
+            //    Description = city.Description,
+            //    Name = city.Name
+            //};
 
             return Ok(cityWithoutPointsOfInterestResult);
            

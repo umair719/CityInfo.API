@@ -100,6 +100,16 @@ namespace CityInfo.API
             // UK - use built in status code page. This is going to return text based string.
             app.UseStatusCodePages();
 
+
+            // UK - Add automapper
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Entities.City, Models.CityWithoutPointsOfInterestDto>();
+                cfg.CreateMap<Entities.City, Models.CityDto>();
+                cfg.CreateMap<Entities.PointOfInterest, Models.PointOfInterestDto>();
+            });
+            
+
             // UK - reference of MVC service
             app.UseMvc();
 
